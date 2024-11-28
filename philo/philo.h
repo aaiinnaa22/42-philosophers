@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:24:34 by aalbrech          #+#    #+#             */
-/*   Updated: 2024/11/26 16:37:41 by aalbrech         ###   ########.fr       */
+/*   Updated: 2024/11/28 13:12:24 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,15 @@
 # include <stdio.h> //printf
 # include <stdlib.h> //malloc free
 
+
+typedef struct s_philo
+{
+    int id;
+    pthread_t thread;
+    t_philo *last;
+    t_philo *next; 
+} t_philo;
+
 typedef struct s_data
 {
     int number_of_philos;
@@ -23,24 +32,17 @@ typedef struct s_data
     int time_to_eat; //time it takes for philo to eat
     int time_to_sleep; //time it takes for philo to sleep
     int times_to_eat; //amount of times each philo has to eat !optional
+    t_philo *philos;
 }   t_data;
-
-typedef struct s_philo
-{
-    t_data *data;
-    pthread_t thread;
-    
-    
-} t_philo;
 
 //handle input
 int handle_input(int ac, char **av, t_data *data);
 
 //init
-int init_philo_node(t_philo *philo);
+void init_data_struct(t_data *data);
 
 //error
-int error_return(char *str, t_philo *philo);
+int error_return(char *str, t_data *data);
 
 
 #endif
