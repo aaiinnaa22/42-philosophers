@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:07:40 by aalbrech          #+#    #+#             */
-/*   Updated: 2024/11/28 13:41:16 by aalbrech         ###   ########.fr       */
+/*   Updated: 2024/11/28 20:27:39 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void add_philo_back(t_philo **philos, t_philo *new)
     temp->next = new;
 }
 
-static t_philo *new_philo(int id)
+static t_philo *new_philo(int id, t_data *data)
 {
     t_philo *new;
 
@@ -48,29 +48,30 @@ static t_philo *new_philo(int id)
     new->next = NULL;
     new->last = NULL;
     new->thread = 0;
-    
+    new->data = data;
+    return (new);
 }
 
-static t_philo *find_last_node(t_philo *philos, int id, t_data *data)
+static void make_lst_circular(t_philo **philos)
 {
-    if (id == data->number_of_philos)
-        return (philos);
-    while  (philos->id < id)
-        philos = philos->next;
-    return (philos);
-}
+    t_philo *head;
+    t_philo *prev;
 
-static void make_lst_circular(t_philo *philos, t_data *data)
-{
-    while (philos != NULL)
+    head = *philos;
+    prev = NULL;
+    while (*philos != NULL)
     {
-        philos->last = find_last_node(philos, philos->id, data);
-        
+        if (prev != NULL)
+            (*philos)->last = prev;
+        prev = *philos;
+        *philos = (*philos)->next;
     }
-    
+    prev->next = head;
+    head->last = prev;
+    *philos = head;
 }
 
-static int init_philo_nodes(t_data *data)
+int init_philo_nodes(t_data *data)
 {
     t_philo *new;
     int i;
@@ -78,12 +79,12 @@ static int init_philo_nodes(t_data *data)
     i = 1;
     while (i <= data->number_of_philos)
     {
-        new = new_philo(i);
+        new = new_philo(i, data);
         if (!new)
             return (1);
         add_philo_back(&data->philos, new);
         i++;
     }
-    make_lst_circular(data->philos)
-    
+    make_lst_circular(&data->philos);
+    return (0);    
 }

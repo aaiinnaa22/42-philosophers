@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:23:56 by aalbrech          #+#    #+#             */
-/*   Updated: 2024/11/28 12:45:38 by aalbrech         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:20:15 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ int main(int ac, char **av)
         init_data_struct(data);
         if (handle_input(ac, av, data) == 1)
             return (error_return("Input is invalid", data));
+        if (init_philo_nodes(data) == 1)
+            return (error_return("Malloc problem in init_philo_nodes", data));
+        philo_time(data);
     }
     else
     {
@@ -35,3 +38,7 @@ int main(int ac, char **av)
     error_return("Success", data);
     return (0);
 }
+
+/*
+- error check all functions, also those which are not yours
+*/
