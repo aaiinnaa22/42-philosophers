@@ -6,11 +6,11 @@
 #    By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/26 13:28:07 by aalbrech          #+#    #+#              #
-#    Updated: 2024/11/28 20:28:26 by aalbrech         ###   ########.fr        #
+#    Updated: 2024/11/28 22:34:58 by aalbrech         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC = main.c handle_input.c init.c error.c philo_time.c utils.c philo_doing.c
+SRC = main.c handle_input.c init.c error.c philo_time.c utils.c philo_doing.c time.c
 		
 
 OBJ = $(SRC:.c=.o)

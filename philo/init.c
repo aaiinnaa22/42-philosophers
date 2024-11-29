@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:07:40 by aalbrech          #+#    #+#             */
-/*   Updated: 2024/11/28 20:27:39 by aalbrech         ###   ########.fr       */
+/*   Updated: 2024/11/29 15:00:12 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ void init_data_struct(t_data *data)
     data->time_to_sleep = 0;
     data->times_to_eat = 0;
     data->philos = NULL;
+    data->real_start_time = 0;
+    data->start_time = 0;
+    data->manager_thread = 0;
+    data->death = 0;
 }
 
 static void add_philo_back(t_philo **philos, t_philo *new)
@@ -49,6 +53,8 @@ static t_philo *new_philo(int id, t_data *data)
     new->last = NULL;
     new->thread = 0;
     new->data = data;
+    new->eat_time = 0;
+    new->started_eating = 0;
     return (new);
 }
 
