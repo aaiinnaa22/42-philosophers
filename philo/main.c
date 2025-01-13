@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:23:56 by aalbrech          #+#    #+#             */
-/*   Updated: 2024/11/28 18:20:15 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/07 23:45:23 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,7 @@ int main(int ac, char **av)
         philo_time(data);
     }
     else
-    {
-        error_return("Wrong amount of arguments", data);
-        return (0);
-    }
-
+        return (error_return("Wrong amount of arguments", data));
     error_return("Success", data);
     return (0);
 }

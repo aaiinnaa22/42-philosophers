@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:24:34 by aalbrech          #+#    #+#             */
-/*   Updated: 2024/11/29 15:35:53 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/10 18:41:47 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,23 @@
 # include <unistd.h> //usleep
 #include <sys/time.h> //gettimeofday
 
+#define GREEN "\033[0;32m"
+#define YELLOW "\033[0;33m"
+#define RED "\033[0;31m"
+#define RESET "\033[0m"
+
 typedef struct s_data   t_data; //I use t_data in t_philo before the computer knows about the struct
 
 typedef struct s_philo //have to mutex everything that can be accessed at the same time? 
                         //like philo->eaten may be accessed in manager while its being changed in another func
 {
     int id;
-    int started_eating;
     long    eat_time;
     pthread_t thread;
     pthread_mutex_t fork;
+    int meal_count; //test
+    pthread_mutex_t meal_flag;
+    pthread_mutex_t time_flag;
     struct s_philo *last;
     struct s_philo *next;
     t_data  *data;
