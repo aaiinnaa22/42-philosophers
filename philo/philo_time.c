@@ -6,9 +6,11 @@ static int enough_eating(t_data *data)
 {
     int i;
     t_philo *temp;
+    int times_eaten;
 
+    times_eaten = 0;
     if (data->times_to_eat == -1)
-        return (0);
+        return (-1);
     i = 1;
     temp = data->philos;
     while (i <= data->number_of_philos)
@@ -17,20 +19,22 @@ static int enough_eating(t_data *data)
         if (temp->meal_count < data->times_to_eat)
         {
             pthread_mutex_unlock(&temp->meal_flag);
-            return (0);
+            return (-1);
         }
+        times_eaten += temp->meal_count;
         pthread_mutex_unlock(&temp->meal_flag);
         i++;
         temp = temp->next;
     }
-    return (1);
+    return (times_eaten);
 }
-//no death checks for printing here since it takes time??
+//no death checks for printing here since it takes time, i return NULL immed after checking, and no concurrent processes.
 static void *time_manager(void *content)
 {
     t_data *data;
     t_philo *temp;
     int i;
+    int res;
 
     data = (t_data *)content;
     temp = data->philos;
@@ -39,12 +43,14 @@ static void *time_manager(void *content)
     {
         temp = data->philos;
         i = 1;
-        if (enough_eating(data) == 1)
+        res = enough_eating(data);
+        if (res != -1)
         {
             pthread_mutex_lock(&data->death_flag);
             data->death = 1;
             pthread_mutex_unlock(&data->death_flag);
             printf( GREEN "%ld Philosophers have eaten enough\n" RESET, time_is(data->real_start_time));
+            printf(GREEN "total eat should be: %d, total eat is: %d\n" RESET, data->times_to_eat * data->number_of_philos, res); 
             return (NULL);
         }
         while (i <= data->number_of_philos)
@@ -103,7 +109,6 @@ static void *philo_doing(void *content)
         if (think(philo) == 1)
             break ;
     }
-
     return (NULL);
 }
 
