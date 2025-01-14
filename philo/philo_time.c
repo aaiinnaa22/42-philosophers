@@ -28,7 +28,7 @@ static int enough_eating(t_data *data)
     }
     return (times_eaten);
 }
-//no death checks for printing here since it takes time, i return NULL immed after checking, and no concurrent processes.
+
 static void *time_manager(void *content)
 {
     t_data *data;
@@ -53,37 +53,9 @@ static void *time_manager(void *content)
             printf(GREEN "total eat should be: %d, total eat is: %d\n" RESET, data->times_to_eat * data->number_of_philos, res); 
             return (NULL);
         }
-        while (i <= data->number_of_philos)
-        {
-            pthread_mutex_lock(&temp->meal_flag);
-            if (temp->meal_count == 0 && (time_is(data->real_start_time) > (data->start_time + data->time_to_die)))
-            {
-                pthread_mutex_lock(&data->death_flag);
-                data->death = 1;
-                pthread_mutex_unlock(&data->death_flag);
-                pthread_mutex_unlock(&temp->meal_flag);
-                printf(RED "%ld %d died without eating\n" RESET, time_is(data->real_start_time), temp->id);
-                return (NULL);
-            }
-            pthread_mutex_lock(&temp->time_flag);
-            if ((temp->meal_count > 0) && (time_is(data->real_start_time) > (temp->eat_time + data->time_to_die)))
-            {
-                pthread_mutex_lock(&data->death_flag);
-                data->death = 1;
-                pthread_mutex_unlock(&data->death_flag);
-                printf(RED "%ld %d died of starvation should have eaten latest at %ld\n" RESET, time_is(data->real_start_time), temp->id, (temp->eat_time + data->time_to_die));
-                pthread_mutex_unlock(&temp->time_flag);
-                pthread_mutex_unlock(&temp->meal_flag);
-                return (NULL);
-            }
-            pthread_mutex_unlock(&temp->time_flag);
-            pthread_mutex_unlock(&temp->meal_flag);
-            temp = temp->next;
-            i++;
-        }
         if (death_check(data) == 1)
             return (NULL);
-        usleep(1000);
+        //usleep(1000);
     }
     return (NULL);
 }
@@ -96,14 +68,20 @@ static void *philo_doing(void *content)
 
     while (1)
     {
+        if (in_control(philo) == 1)
+            break;
         if (death_check(philo->data) == 1)
             break ;
         if (eat(philo) == 1)
             break ;
+        if (in_control(philo) == 1)
+            break;
         if (death_check(philo->data) == 1)
             break ;
         if (to_sleep(philo) == 1)
             break ;
+        if (in_control(philo) == 1)
+            break;
         if (death_check(philo->data) == 1)
             break ;
         if (think(philo) == 1)
@@ -117,7 +95,6 @@ static void threading(t_data *data)
     t_philo *temp;
     int i;
 
-    //ft_printlst(data);
     temp = data->philos;
     if (data->number_of_philos == 1)
     {

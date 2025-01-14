@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:24:34 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/13 16:57:29 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/14 19:30:17 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int    eat(t_philo *philo);
 int    to_sleep(t_philo *philo);
 int   think(t_philo *philo);
 int death_check(t_data *data);
+int in_control(t_philo *philo);  //TEST, so more frequent try if philos are still alive
 
 //del
 void    ft_printlst(t_data *data);
