@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:24:34 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/14 19:30:17 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/16 20:26:26 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ struct s_data
     long    real_start_time;
     long    start_time;
     pthread_t manager_thread;
+    //pthread_mutex_t print_flag;
     t_philo *philos;
 };
 

@@ -32,17 +32,11 @@ static int enough_eating(t_data *data)
 static void *time_manager(void *content)
 {
     t_data *data;
-    t_philo *temp;
-    int i;
     int res;
 
     data = (t_data *)content;
-    temp = data->philos;
-    i = 1;
     while (1)
     {
-        temp = data->philos;
-        i = 1;
         res = enough_eating(data);
         if (res != -1)
         {
@@ -74,15 +68,7 @@ static void *philo_doing(void *content)
             break ;
         if (eat(philo) == 1)
             break ;
-        if (in_control(philo) == 1)
-            break;
-        if (death_check(philo->data) == 1)
-            break ;
         if (to_sleep(philo) == 1)
-            break ;
-        if (in_control(philo) == 1)
-            break;
-        if (death_check(philo->data) == 1)
             break ;
         if (think(philo) == 1)
             break ;
@@ -109,6 +95,8 @@ static void threading(t_data *data)
         while (i <= data->number_of_philos) //or times to be able to eat is not reached yet
         {
             pthread_mutex_init(&temp->fork, NULL);
+            pthread_mutex_init(&temp->meal_flag, NULL);
+            pthread_mutex_init(&temp->time_flag, NULL);
             pthread_create(&temp->thread, NULL, philo_doing, temp);
             temp = temp->next;
             i++;
@@ -119,6 +107,9 @@ static void threading(t_data *data)
         while (i <= data->number_of_philos)
         {
             pthread_join(temp->thread, NULL);
+            pthread_mutex_destroy(&temp->fork);
+            pthread_mutex_destroy(&temp->meal_flag);
+            pthread_mutex_destroy(&temp->time_flag);
             temp = temp->next;
             i++;
         }
@@ -128,6 +119,9 @@ static void threading(t_data *data)
 
 void    philo_time(t_data *data)
 {
+    //USE PTHREAD MUTEX DESTROY
     pthread_mutex_init(&data->death_flag, NULL);
+    //pthread_mutex_init(&data->print_flag, NULL);
     threading(data);
+    pthread_mutex_destroy(&data->death_flag);
 }
