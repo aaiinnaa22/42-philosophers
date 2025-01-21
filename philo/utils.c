@@ -1,4 +1,4 @@
-//Stdheader
+
 #include "philo.h"
 //del
 void    ft_printlst(t_data *data)

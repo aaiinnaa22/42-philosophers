@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:24:34 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/16 20:26:26 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:44:48 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ struct s_data
     long    real_start_time;
     long    start_time;
     pthread_t manager_thread;
-    //pthread_mutex_t print_flag;
+    pthread_mutex_t print_flag;
     t_philo *philos;
 };
 
@@ -73,7 +73,8 @@ int    eat(t_philo *philo);
 int    to_sleep(t_philo *philo);
 int   think(t_philo *philo);
 int death_check(t_data *data);
-int in_control(t_philo *philo);  //TEST, so more frequent try if philos are still alive
+//int in_control(t_philo *philo);  //TEST, so more frequent try if philos are still alive
+void philo_msg(char *s, t_philo *philo);
 
 //del
 void    ft_printlst(t_data *data);

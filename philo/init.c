@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:07:40 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/10 18:44:42 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:26:14 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,13 @@ static t_philo *new_philo(int id, t_data *data)
     new->next = NULL;
     new->last = NULL;
     new->thread = 0;
+    if (!data)
+    {
+        printf("data is null\n");
+        return (NULL);
+    }
     new->data = data;
-    new->eat_time = 0;
+    new->eat_time = -1;
     new->meal_count = 0; //test
     pthread_mutex_init(&new->meal_flag, NULL);
     pthread_mutex_init(&new->time_flag, NULL);
