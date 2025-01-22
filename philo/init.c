@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:07:40 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/21 16:26:14 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:51:26 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,11 @@ void init_data_struct(t_data *data)
     data->time_to_sleep = 0;
     data->times_to_eat = -1;
     data->philos = NULL;
-    data->real_start_time = 0;
     data->start_time = 0;
     data->manager_thread = 0;
     data->death = 0;
+    pthread_mutex_init(&data->death_flag, NULL);
+    pthread_mutex_init(&data->print_flag, NULL);
 }
 
 static void add_philo_back(t_philo **philos, t_philo *new)
@@ -52,16 +53,17 @@ static t_philo *new_philo(int id, t_data *data)
     new->next = NULL;
     new->last = NULL;
     new->thread = 0;
-    if (!data)
+    if (!data) //not needed prob
     {
-        printf("data is null\n");
+        printf("data is null\n"); //FIX
         return (NULL);
     }
     new->data = data;
     new->eat_time = -1;
-    new->meal_count = 0; //test
+    new->meal_count = 0;
     pthread_mutex_init(&new->meal_flag, NULL);
     pthread_mutex_init(&new->time_flag, NULL);
+    pthread_mutex_init(&new->fork, NULL);
     return (new);
 }
 
@@ -93,8 +95,11 @@ int init_philo_nodes(t_data *data)
     while (i <= data->number_of_philos)
     {
         new = new_philo(i, data);
-        if (!new)
-            return (1);
+        if (!new) 
+        {
+                free_philos(&data->philos, i); //try if works as expected
+                return (1);
+        }
         add_philo_back(&data->philos, new);
         i++;
     }

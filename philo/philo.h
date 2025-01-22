@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:24:34 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/21 15:44:48 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:08:00 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct s_philo //have to mutex everything that can be accessed at the sa
     t_data  *data;
 } t_philo;
 
-struct s_data
+struct s_data //LONG?
 {
     int number_of_philos;
     int time_to_die; //time philo will die if doesnt eat
@@ -50,7 +50,6 @@ struct s_data
     int times_to_eat; //amount of times each philo has to eat !optional
     int death;
     pthread_mutex_t death_flag;
-    long    real_start_time;
     long    start_time;
     pthread_t manager_thread;
     pthread_mutex_t print_flag;
@@ -65,23 +64,20 @@ void init_data_struct(t_data *data);
 int init_philo_nodes(t_data *data);
 
 //error
-int error_return(char *str, t_data *data);
+int error_return(char *str, t_data **data);
+void free_all(t_data **data);
+void free_philos(t_philo **philos, int amount);
 
 //philo time
-void    philo_time(t_data *data);
-int    eat(t_philo *philo);
-int    to_sleep(t_philo *philo);
-int   think(t_philo *philo);
+int    philo_time(t_data *data);
 int death_check(t_data *data);
-//int in_control(t_philo *philo);  //TEST, so more frequent try if philos are still alive
 void philo_msg(char *s, t_philo *philo);
+void ft_usleep(long millisecs);
 
 //del
 void    ft_printlst(t_data *data);
 
 //time
-long    time_is(long real_start_time);
-long    init_time_is();
-
+long    time_is(void);
 
 #endif
