@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:09:33 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/22 14:14:31 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/22 21:36:33 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static void *death_manager(void *content)
             pthread_mutex_lock(&temp->time_flag);
             if ((temp->eat_time == -1) && (current_time > data->time_to_die)) 
             {
-                printf("time is:%ld should have eaten: %d\n", current_time, data->time_to_die);
+                printf("time is: %ld should have eaten: %d\n", current_time, data->time_to_die);
                 //philo_msg("died without eating", temp);
                 pthread_mutex_lock(&data->death_flag);
                 temp->data->death = 1;
@@ -87,7 +87,7 @@ static void *death_manager(void *content)
                 pthread_mutex_lock(&data->death_flag);
                 temp->data->death = 1;
                 pthread_mutex_unlock(&data->death_flag);
-                printf(RED "%ld %d died of starvation should have eaten latest at %ld\n" RESET, current_time, temp->id, (temp->eat_time + data->time_to_die) - data->start_time);
+                printf(RED "%ld %d died of starvation should have eaten latest at %ld\n" RESET, current_time, temp->id, (temp->eat_time + data->time_to_die));
                 pthread_mutex_unlock(&temp->time_flag);
                 pthread_mutex_unlock(&temp->meal_flag);
                 return (NULL);
@@ -97,40 +97,47 @@ static void *death_manager(void *content)
             i++;
             temp = temp->next;
         }
+        usleep(1000);
     }
     return (NULL);
 }
 
-static void take_forks(t_philo *philo)
+static void take_forks(t_philo *philo) //try
 {
-    if (philo->id % 2 == 0)
+    if (philo->id % 2 != 0)
     {
         pthread_mutex_lock(&philo->fork);
-        philo_msg("has taken a fork", philo);
+        philo_msg("has taken own fork", philo);
         pthread_mutex_lock(&philo->next->fork);
-        philo_msg("has taken a fork", philo);
+        philo_msg("has taken next fork", philo);
     }
     else
     {
         pthread_mutex_lock(&philo->next->fork);
-        philo_msg("has taken a fork", philo);
+        philo_msg("has taken next fork", philo);
         pthread_mutex_lock(&philo->fork);
-        philo_msg("has taken a fork", philo);
+        philo_msg("has taken own fork", philo);
     }
 }
+
 
 static void *philo_doing(void *content)
 {
     t_philo *philo;
 
     philo = (t_philo *)content;
+    /*if (philo->id % 2 != 0)
+    {
+        printf(YELLOW "%ld philo %d thinks before routine\n" RESET, time_is() - philo->data->start_time, philo->id);
+        usleep(philo->data->time_to_die * 100);
+    }*/
     while (death_check(philo->data) == 0)
     {
         philo = (t_philo *)content;
         take_forks(philo);
-        philo_msg("is eating", philo);
+        philo_msg(YELLOW "is eating" RESET, philo);
         pthread_mutex_lock(&philo->time_flag);
-        philo->eat_time = time_is();
+        philo->eat_time = time_is() - philo->data->start_time;
         pthread_mutex_unlock(&philo->time_flag);
         ft_usleep(philo->data->time_to_eat);
         pthread_mutex_lock(&philo->meal_flag);
@@ -181,7 +188,13 @@ static void end_threads(t_data *data)
     }
     pthread_join(data->manager_thread, NULL);
 }
+/*fix:
 
+-time works as expected?
+-time differences check up!
+-optimize in think?
+-time is always in milliseconds?
+*/
 int    philo_time(t_data *data)
 {
     if (make_threads(data) == 1)

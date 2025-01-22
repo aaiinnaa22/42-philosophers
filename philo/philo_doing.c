@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 15:50:19 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/22 14:01:36 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/22 20:48:13 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 
 void philo_msg(char *s, t_philo *philo)
 {
-    if (death_check(philo->data) == 1)
-        return ;
     pthread_mutex_lock(&philo->data->print_flag);
+    if (death_check(philo->data) == 1)
+    {
+        pthread_mutex_unlock(&philo->data->print_flag);
+        return ;
+    }
     printf("%ld %d %s\n", time_is() - philo->data->start_time, philo->id, s);
     pthread_mutex_unlock(&philo->data->print_flag);
 }
