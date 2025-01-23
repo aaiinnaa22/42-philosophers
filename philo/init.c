@@ -6,13 +6,13 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:07:40 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/22 13:51:26 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/23 14:56:05 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void init_data_struct(t_data *data)
+int init_data_struct(t_data *data)
 {
     data->number_of_philos = 0;
     data->time_to_die = 0;
@@ -23,8 +23,14 @@ void init_data_struct(t_data *data)
     data->start_time = 0;
     data->manager_thread = 0;
     data->death = 0;
-    pthread_mutex_init(&data->death_flag, NULL);
-    pthread_mutex_init(&data->print_flag, NULL);
+    if (pthread_mutex_init(&data->death_flag, NULL) != 0)
+        return (1);
+    if (pthread_mutex_init(&data->print_flag, NULL) != 0)
+    {
+        pthread_mutex_destroy(&data->death_flag);
+        return (1);
+    }
+    return (0);
 }
 
 static void add_philo_back(t_philo **philos, t_philo *new)
@@ -61,9 +67,24 @@ static t_philo *new_philo(int id, t_data *data)
     new->data = data;
     new->eat_time = -1;
     new->meal_count = 0;
-    pthread_mutex_init(&new->meal_flag, NULL);
-    pthread_mutex_init(&new->time_flag, NULL);
-    pthread_mutex_init(&new->fork, NULL);
+    if (pthread_mutex_init(&new->meal_flag, NULL) != 0)
+    {
+        free(new);
+        return (NULL);
+    }
+    if (pthread_mutex_init(&new->time_flag, NULL) != 0)
+    {
+        pthread_mutex_destroy(&new->meal_flag);
+        free(new);
+        return (NULL);
+    }
+    if (pthread_mutex_init(&new->fork, NULL) != 0)
+    {
+        pthread_mutex_destroy(&new->meal_flag);
+        pthread_mutex_destroy(&new->time_flag);
+        free(new);
+        return (NULL);
+    }
     return (new);
 }
 

@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:24:34 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/22 14:08:00 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/23 14:49:01 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ struct s_data //LONG?
 int handle_input(int ac, char **av, t_data *data);
 
 //init
-void init_data_struct(t_data *data);
+int init_data_struct(t_data *data);
 int init_philo_nodes(t_data *data);
 
 //error
