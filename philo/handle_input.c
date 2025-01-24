@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:44:28 by aalbrech          #+#    #+#             */
-/*   Updated: 2024/11/26 16:11:02 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/24 11:13:35 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int  ft_atoi(char *str)
         res = (res * 10) + (str[i] - '0');
         i++;
     }
-    if ((res) > 2147483647)
+    if ((res) > 2147483647) //we are using long!??
 		return (-1);
     return (res);
 }

@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:23:56 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/23 14:57:18 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/24 12:02:39 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int main(int ac, char **av)
     if (init_philo_nodes(data) == 1)
         return (error_return("Malloc problem in init_philo_nodes", &data));
     if (philo_time(data) == 1)
-        return (1);
+        return (error_return("Couldn't create thread", &data));
     free_all(&data);
     return (0);
 }

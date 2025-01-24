@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:09:33 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/23 18:22:39 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:42:07 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,35 +107,62 @@ static void *death_manager(void *content)
     return (NULL);
 }
 
-static void take_forks(t_philo *philo) //try
+static void take_forks(t_philo *philo) //add the one philo end
 {
-    if (philo->id % 2 == 0)
-    {
+    //if (philo->id % 2 == 0) //change so thinking % before rout instead=? what is more optimal
+   // {
         pthread_mutex_lock(&philo->fork);
         //philo_msg("has taken own fork", philo);
         philo_msg("has taken a fork", philo);
         pthread_mutex_lock(&philo->next->fork);
         //philo_msg("has taken next fork", philo);
         philo_msg("has taken a fork", philo);
-    }
-    else
+    //}
+    /*else
     {
         pthread_mutex_lock(&philo->next->fork);
         //philo_msg("has taken next fork", philo);
         philo_msg("has taken a fork", philo);
+        if (philo->data->number_of_philos == 1)
+        {
+            while (death_check(philo->data) == 0)
+                continue ;
+            return ;
+        }
         pthread_mutex_lock(&philo->fork);
         //philo_msg("has taken own fork", philo);
         philo_msg("has taken a fork", philo);
-    }
+    }*/
 }
 
-
+static void philo_thinks(t_philo *philo)
+{
+    long think_time;
+    
+    philo_msg("is thinking", philo);
+    pthread_mutex_lock(&philo->time_flag);
+    think_time = (philo->data->time_to_die - philo->eat_time - philo->data->time_to_eat) / 2;
+    pthread_mutex_unlock(&philo->time_flag);
+    if (think_time < 0)
+        think_time = 1;
+    if (think_time == 0)
+        think_time = 0;
+    if (think_time > 600)
+        think_time = 200;
+    //pthread_mutex_lock(&philo->data->print_flag);
+    //printf(YELLOW "philo %d sleeping for %ld\n" RESET, philo->id, think_time);
+    //pthread_mutex_unlock(&philo->data->print_flag);
+    ft_usleep(think_time);
+}
 static void *philo_doing(void *content)
 {
     t_philo *philo;
-    long think_time;
 
     philo = (t_philo *)content;
+    if (philo->id % 2 == 0)
+    {
+        philo_thinks(philo);
+    }
     while (death_check(philo->data) == 0)
     {
         philo = (t_philo *)content;
@@ -152,40 +179,41 @@ static void *philo_doing(void *content)
         pthread_mutex_unlock(&philo->next->fork);
         philo_msg("is sleeping", philo);
         ft_usleep(philo->data->time_to_sleep);
-        philo_msg("is thinking", philo);
-        pthread_mutex_lock(&philo->time_flag);
-        think_time = (philo->data->time_to_die - philo->eat_time - philo->data->time_to_eat) / 2;
-        pthread_mutex_unlock(&philo->time_flag);
-        if (think_time <= 0)
-            think_time = 1;
-        if (think_time > 600)
-            think_time = 200;
-        //pthread_mutex_lock(&philo->data->print_flag);
-        //printf(YELLOW "philo %d sleeping for %ld\n" RESET, philo->id, think_time);
-        //pthread_mutex_unlock(&philo->data->print_flag);
-        ft_usleep(think_time);
+        philo_thinks(philo);
     }
     return (NULL);
 }
 
 static int make_threads(t_data *data)
 {
-    //make work with only ONE philo
     t_philo *temp;
     int i;
+    int j;
 
     data->start_time = time_is(); 
     temp = data->philos;
     i = 1;
+    j = 1;
+    if (pthread_create(&data->manager_thread, NULL, death_manager, data) != 0)
+        return (1);
     while (i <= data->number_of_philos)
     {
         if (pthread_create(&temp->thread, NULL, philo_doing, temp) != 0)
-            return (error_return("Couldn't create thread", &data));
+        {
+            //correct??
+            temp = data->philos;
+            while (j < i)
+            {
+                pthread_join(temp->thread, NULL);
+                j++;
+                temp = temp->next;
+            }
+            pthread_join(data->manager_thread, NULL);
+            return (1);
+        }
         temp = temp->next;
         i++;
     }
-    if (pthread_create(&data->manager_thread, NULL, death_manager, data) != 0)
-        return (error_return("Couldn't create thread", &data));
     return (0);
 }
 static void end_threads(t_data *data)
@@ -213,9 +241,7 @@ static void end_threads(t_data *data)
 int    philo_time(t_data *data)
 {
     if (make_threads(data) == 1)
-        return (1); //so no, not here immed
-    //i have to end threads? and know how many to end
-    //if thread == (what i assigned in new_philo), dont join thread
+        return (1);
     end_threads(data);
     return (0);
 }
