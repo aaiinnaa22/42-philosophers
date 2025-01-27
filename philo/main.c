@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:23:56 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/24 12:02:39 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/27 18:20:08 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,3 @@ int main(int ac, char **av)
     free_all(&data);
     return (0);
 }
-
-/*
-- error check all functions, also those which are not yours
-*/

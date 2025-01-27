@@ -6,11 +6,9 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:09:33 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/27 17:34:37 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/27 18:59:58 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #include "philo.h"
 
@@ -41,7 +39,7 @@ static int enough_eating(t_data *data)
     return (times_eaten);
 }
 
-static void *death_manager(void *content) //lock orders??!
+static void *death_manager(void *content) //no locking violations, locks always in the same order
 {
     t_data *data;
     int res;
@@ -101,9 +99,9 @@ static void *death_manager(void *content) //lock orders??!
     return (NULL);
 }
 
-static int take_forks(t_philo *philo) //add the one philo end
+static int take_forks(t_philo *philo)
 {
-    /*if (philo->id == philo->data->number_of_philos) //this makes the simulation fail, but needed for correct lock-order
+    if (philo->id % 2 != 0)
     {
         pthread_mutex_lock(&philo->next->fork);
         if (philo_msg("has taken a fork", philo) == 1)
@@ -120,7 +118,7 @@ static int take_forks(t_philo *philo) //add the one philo end
         }
     }
     else
-    {*/
+    {
         pthread_mutex_lock(&philo->fork);
         if (philo_msg("has taken a fork", philo) == 1)
         {
@@ -134,7 +132,7 @@ static int take_forks(t_philo *philo) //add the one philo end
             pthread_mutex_unlock(&philo->fork);   
             return (1);
         }
-    //}
+    }
     return (0);
 }
 
@@ -147,9 +145,6 @@ static int philo_thinks(t_philo *philo)
         return (1);
     pthread_mutex_lock(&philo->time_flag);
     think_time = (philo->data->time_to_die - (time_is() - philo->eat_time) - philo->data->time_to_eat) / 2;
-    //pthread_mutex_lock(&philo->data->print_flag);
-    //printf("time to die: %d, time since last meal: %ld, time to eat: %d\n", philo->data->time_to_die, (time_is() - philo->eat_time), philo->data->time_to_eat);
-   // pthread_mutex_unlock(&philo->data->print_flag);
     pthread_mutex_unlock(&philo->time_flag);
     if (think_time < 0)
         think_time = 0;
@@ -157,13 +152,10 @@ static int philo_thinks(t_philo *philo)
         think_time = 1;
     if (think_time > 600)
         think_time = 200;
-    //pthread_mutex_lock(&philo->data->print_flag);
-    //printf("%d is thinking for %ld\n", philo->id, think_time);
-    //pthread_mutex_unlock(&philo->data->print_flag);
     ft_usleep(think_time);
     return (0);
 }
-static void *philo_doing(void *content)
+static void *philo_doing(void *content) //all thread should begin at exact same time + check that all shared are mutex protected
 {
     t_philo *philo;
 
@@ -174,6 +166,11 @@ static void *philo_doing(void *content)
         philo->eat_time = time_is(); //for the think calcu to work
         pthread_mutex_unlock(&philo->time_flag);
         if (philo_thinks(philo) == 1)
+            return (NULL);
+    }
+    else
+    {
+        if (philo_msg("is thinking",philo) == 1)
             return (NULL);
     }
     while (death_check(philo->data) == 0)
@@ -188,13 +185,13 @@ static void *philo_doing(void *content)
             break ;
         }
         pthread_mutex_lock(&philo->time_flag);
-        philo->eat_time = time_is(); //time_is() - philo->data->start_time;
+        philo->eat_time = time_is();
         pthread_mutex_unlock(&philo->time_flag);
         ft_usleep(philo->data->time_to_eat);
         pthread_mutex_lock(&philo->meal_flag);
         philo->meal_count++;
         pthread_mutex_unlock(&philo->meal_flag);
-        if (philo->id == philo->data->number_of_philos)
+        if (philo->id % 2 != 0)
         {
             pthread_mutex_unlock(&philo->fork);
             pthread_mutex_unlock(&philo->next->fork);
