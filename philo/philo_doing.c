@@ -6,22 +6,23 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 15:50:19 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/23 17:45:23 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/27 16:04:15 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void philo_msg(char *s, t_philo *philo)
+int philo_msg(char *s, t_philo *philo)
 {
     pthread_mutex_lock(&philo->data->print_flag);
     if (death_check(philo->data) == 1)
     {
         pthread_mutex_unlock(&philo->data->print_flag);
-        return ;
+        return (1);
     }
     printf("%ld %d %s\n", time_is() - philo->data->start_time, philo->id, s);
     pthread_mutex_unlock(&philo->data->print_flag);
+    return (0);
 }
 
 int death_check(t_data *data)
