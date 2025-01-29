@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:24:34 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/29 14:34:38 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:46:35 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ typedef struct s_philo //have to mutex everything that can be accessed at the sa
     int meal_count; //test
     pthread_mutex_t meal_flag;
     pthread_mutex_t time_flag;
-    struct s_philo *last;
     struct s_philo *next;
     t_data  *data;
 } t_philo;
@@ -56,19 +55,15 @@ struct s_data //LONG?
     t_philo *philos;
 };
 
-//handle input
-int handle_input(int ac, char **av, t_data *data);
+int insert_data(int ac, char **av, t_data *data);
+int set_data_struct(int ac, char **av, t_data **data);
+int init_philo_nodes(t_data **data);
 
-//init
-int init_data_struct(t_data *data);
-int init_philo_nodes(t_data *data);
-
-//error
-int error_return(char *str, t_data **data);
+int error_return(char *str, t_data **data, int check);
 void free_all(t_data **data);
-void free_philos(t_philo **philos, int amount);
+void free_data(t_data **data);
+void del_philo_mutex(t_philo *philo);
 
-//philo time
 int    threading(t_data *data);
 int death_check(t_data *data);
 int philo_msg(char *s, t_philo *philo);
@@ -76,18 +71,9 @@ int philo_thinks(t_philo *philo);
 int philo_eats(t_philo *philo);
 int philo_sleeps(t_philo *philo);
 void syncro_start(long start_time);
-
-//death manager
 void *death_manager(void *content);
-
-//routine
 void *philo_doing(void *content);
 void *one_philo(void *content);
-
-//del
-void    ft_printlst(t_data *data);
-
-//time
 long    time_is(void);
 
 #endif

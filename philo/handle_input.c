@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:44:28 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/24 11:13:35 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/29 16:47:39 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int  ft_atoi(char *str)
     return (res);
 }
 
-int handle_input(int ac, char **av, t_data *data)
+int insert_data(int ac, char **av, t_data *data)
 {
     data->number_of_philos = ft_atoi(av[1]);
     if (data->number_of_philos < 0)

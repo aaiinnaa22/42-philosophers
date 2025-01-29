@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:29:56 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/29 15:55:34 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/29 17:29:32 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int has_died(t_data *data)
     while (i <= data->number_of_philos)
     {
         pthread_mutex_lock(&philos->time_flag);
-        if((philos->eat_time == -1) && (time_is() > (data->start_time + data->time_to_die))) //sometimes eat time hasnt had the time to be put
+        if((philos->eat_time == -1) && (time_is() > (data->start_time + data->time_to_die)))
         {
             pthread_mutex_unlock(&philos->time_flag);
             return (philo_done(data, philos->id, 1));

@@ -6,11 +6,13 @@
 #    By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/26 13:28:07 by aalbrech          #+#    #+#              #
-#    Updated: 2025/01/29 14:33:36 by aalbrech         ###   ########.fr        #
+#    Updated: 2025/01/29 18:29:07 by aalbrech         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC = main.c handle_input.c init.c error.c threads.c utils.c philo_doing.c time.c philo_routine.c death_manager.c
+SRC = main.c handle_input.c philo_nodes.c error.c \
+threads.c utils.c philo_doing.c time.c philo_routine.c \
+death_manager.c data_struct.c
 		
 
 OBJ = $(SRC:.c=.o)

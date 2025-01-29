@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:31:16 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/29 15:58:06 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/29 17:27:31 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,8 @@ void *philo_doing(void *content)
             return (NULL);
         if (philo_sleeps(philo) == 1)
             return (NULL);
-        usleep(philo->data->time_to_sleep * 1000);
         if (philo_thinks(philo) == 1)
-            break ;
+            return (NULL);
     }
     return (NULL);
 }

@@ -6,20 +6,21 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:12:12 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/23 14:04:03 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:18:15 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int error_return(char *str, t_data **data)
+int error_return(char *str, t_data **data, int check)
 {
     printf("Error: %s\n", str);
-    free_all(data);
+    if (check == 1)
+        free_all(data);
     return (1);
 }
 
-static void del_philo_mutex(t_philo *philo)
+void del_philo_mutex(t_philo *philo)
 {
     pthread_mutex_destroy(&philo->fork);
     pthread_mutex_destroy(&philo->meal_flag);
@@ -32,7 +33,7 @@ static void del_data_mutex(t_data *data)
     pthread_mutex_destroy(&data->print_flag);
 }
 
-void free_philos(t_philo **philos, int amount)
+static void free_philos(t_philo **philos)
 {
     t_philo *temp;
     t_philo *next;
@@ -40,10 +41,7 @@ void free_philos(t_philo **philos, int amount)
     int philo_num;
 
     temp = *philos;
-    if (amount != -1)
-        i = amount;
-    else
-        i = 1;
+    i = 1;
     philo_num = (*philos)->data->number_of_philos;
     while (i <= philo_num)
     {
@@ -56,7 +54,7 @@ void free_philos(t_philo **philos, int amount)
     *philos = NULL;
 }
 
-static void free_data(t_data **data)
+void free_data(t_data **data)
 {
     if (*data)
     {
@@ -72,7 +70,7 @@ void free_all(t_data **data)
     {
         if ((*data)->philos)
         {
-            free_philos(&(*data)->philos, -1);
+            free_philos(&(*data)->philos);
             (*data)->philos = NULL;
         }
         free_data(data);

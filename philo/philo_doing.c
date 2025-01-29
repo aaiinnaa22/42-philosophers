@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 15:50:19 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/29 14:26:46 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/29 17:27:17 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,6 @@ int philo_sleeps(t_philo *philo)
 {
     if (philo_msg("is sleeping", philo) == 1)
         return (1);
+    usleep(philo->data->time_to_sleep * 1000);
     return (0);
 }
