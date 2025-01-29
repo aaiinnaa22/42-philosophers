@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:24:34 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/27 16:04:35 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/29 14:34:38 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,20 @@ void free_all(t_data **data);
 void free_philos(t_philo **philos, int amount);
 
 //philo time
-int    philo_time(t_data *data);
+int    threading(t_data *data);
 int death_check(t_data *data);
 int philo_msg(char *s, t_philo *philo);
-void ft_usleep(long millisecs);
+int philo_thinks(t_philo *philo);
+int philo_eats(t_philo *philo);
+int philo_sleeps(t_philo *philo);
+void syncro_start(long start_time);
+
+//death manager
+void *death_manager(void *content);
+
+//routine
+void *philo_doing(void *content);
+void *one_philo(void *content);
 
 //del
 void    ft_printlst(t_data *data);
