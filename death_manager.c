@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:29:56 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/29 17:29:32 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:16:14 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,8 @@ static int philo_done(t_data *data, int philo_id, int status)
 static int enough_eating(t_data *data)
 {
     int i;
-    int times_eaten;
     t_philo *philos;
 
-    times_eaten = 0;
     philos = data->philos;
     if (data->times_to_eat == -1)
         return (0);
@@ -45,7 +43,6 @@ static int enough_eating(t_data *data)
             pthread_mutex_unlock(&philos->meal_flag);
             return (0);
         }
-        times_eaten += philos->meal_count;
         pthread_mutex_unlock(&philos->meal_flag);
         i++;
         philos = philos->next;

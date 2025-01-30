@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   philo_nodes.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:07:40 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/29 18:28:26 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:14:53 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,8 @@ static void premature_philo_free(t_philo **philos, int i)
 {
     t_philo *temp;
     t_philo *next;
-    int philo_num;
 
     temp = *philos;
-    philo_num = (*philos)->data->number_of_philos;
     while (i >= 1)
     {
         next = temp->next;

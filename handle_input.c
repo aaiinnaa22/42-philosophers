@@ -6,13 +6,13 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:44:28 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/29 16:47:39 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:01:09 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int  input_is_num(char *str) //is negative allowed?
+static int  input_is_num(char *str)
 {
     int i;
 
@@ -48,7 +48,7 @@ static int  ft_atoi(char *str)
         res = (res * 10) + (str[i] - '0');
         i++;
     }
-    if ((res) > 2147483647) //we are using long!??
+    if ((res) > 2147483647)
 		return (-1);
     return (res);
 }

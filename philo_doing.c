@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 15:50:19 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/29 17:27:17 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:07:15 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,53 +29,6 @@ int philo_thinks(t_philo *philo)
         think_time = 200;
     usleep(think_time * 1000);
     return (0);
-}
-
-static int lock_forks(t_philo *philo, pthread_mutex_t *first, pthread_mutex_t *next)
-{
-    pthread_mutex_lock(first);
-    if (philo_msg("has taken a fork", philo) == 1)
-    {
-        pthread_mutex_unlock(first);
-        return (1);
-    }
-    pthread_mutex_lock(next);
-    if (philo_msg("has taken a fork", philo) == 1)
-    {
-        pthread_mutex_unlock(next); 
-        pthread_mutex_unlock(first);   
-        return (1);
-    }
-    return (0);
-}
-
-static void unlock_forks(pthread_mutex_t *first, pthread_mutex_t *next)
-{
-    pthread_mutex_unlock(first);
-    pthread_mutex_unlock(next);
-}
-
-static int use_forks(t_philo *philo, int check)
-{
-    int res;
-    
-    if (check == 0)
-    {
-        if (philo->id % 2 == 0)
-            res = lock_forks(philo, &philo->fork, &philo->next->fork);
-        else
-            res = lock_forks(philo, &philo->next->fork, &philo->fork);
-        return (res);
-    }
-    else if (check == 1)
-    {
-        if (philo->id % 2 == 0)
-            unlock_forks(&philo->fork, &philo->next->fork);
-        else
-            unlock_forks(&philo->next->fork, &philo->fork);
-        return (0);
-    }
-    return (-1);
 }
 
 int philo_eats(t_philo *philo)

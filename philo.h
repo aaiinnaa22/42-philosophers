@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 13:24:34 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/29 18:46:35 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:07:45 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,9 @@
 #define RED "\033[0;31m"
 #define RESET "\033[0m"
 
-typedef struct s_data   t_data; //I use t_data in t_philo before the computer knows about the struct
+typedef struct s_data   t_data;
 
-typedef struct s_philo //have to mutex everything that can be accessed at the same time? 
-                        //like philo->eaten may be accessed in manager while its being changed in another func
+typedef struct s_philo
 {
     int id;
     long    eat_time;
@@ -40,13 +39,13 @@ typedef struct s_philo //have to mutex everything that can be accessed at the sa
     t_data  *data;
 } t_philo;
 
-struct s_data //LONG?
+struct s_data
 {
     int number_of_philos;
-    int time_to_die; //time philo will die if doesnt eat
-    int time_to_eat; //time it takes for philo to eat
-    int time_to_sleep; //time it takes for philo to sleep
-    int times_to_eat; //amount of times each philo has to eat !optional
+    int time_to_die;
+    int time_to_eat;
+    int time_to_sleep;
+    int times_to_eat;
     int death;
     pthread_mutex_t death_flag;
     long    start_time;
@@ -75,5 +74,6 @@ void *death_manager(void *content);
 void *philo_doing(void *content);
 void *one_philo(void *content);
 long    time_is(void);
+int use_forks(t_philo *philo, int check);
 
 #endif

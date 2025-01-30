@@ -6,7 +6,7 @@
 /*   By: aalbrech <aalbrech@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:09:33 by aalbrech          #+#    #+#             */
-/*   Updated: 2025/01/29 19:07:39 by aalbrech         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:42:32 by aalbrech         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,15 @@ static int end_threads(t_data *data, int thread_count)
     pthread_join(data->manager_thread, NULL);
     return (1);
 }
-//if a thread fails, other can still potentially begin, is that okay?
+
 static int make_threads(t_data *data)
 {
     t_philo *temp;
     int i;
-    int j;
 
     data->start_time = time_is() + (data->number_of_philos * 20); 
     temp = data->philos;
     i = 1;
-    j = 1;
     if (data->number_of_philos == 1)
     {
         if (pthread_create(&temp->thread, NULL, one_philo, temp) != 0)
